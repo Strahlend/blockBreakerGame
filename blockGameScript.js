@@ -284,9 +284,9 @@ function draw()
                 }
                 if (j+1 == ballArray.length)
                 {
-                    console.log("game over");
-                    alert ("Game Over");
-                    document.location.reload();
+                    // console.log("game over");
+                    // alert ("Game Over");
+                    // document.location.reload();
                 }
             }
         }
@@ -351,6 +351,13 @@ document.addEventListener("keyup", keyUpHandler, false);
 //mouse listener
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
+//var el = document.getElementsByTagName("canvas")[0];
+document.addEventListener("touchstart", handleStart, false);
+document.addEventListener("touchmove", handleMove, false);
+//document.addEventListener("touchend", handleEnd, false);
+//el.addEventListener("touchend", handleEnd);
+//el.addEventListener("touchcancel", handleCancel);
+
 //input functions
 function keyDownHandler(e) 
 {
@@ -383,6 +390,25 @@ function mouseMoveHandler(e)
     {
         paddleX = relativeX - paddleWidth / 2;
     }
+}
+
+function handleStart(e)
+{
+    var relativeX = e.clientX - canvas.offsetLeft;
+    if (relativeX > 0 && relativeX < canvas.width)
+    {
+        paddleX = relativeX - paddleWidth / 2;
+    }
+}
+
+function handleMove(e)
+{
+    var relativeX = e.touches[0].clientX - canvas.offsetLeft;
+    if (relativeX > 0 && relativeX < canvas.width)
+    {
+        paddleX = relativeX - paddleWidth / 2;
+    }
+    console.log(e.touches[0].clientX);
 }
 
 //old way to draw frames
