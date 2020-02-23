@@ -47,6 +47,12 @@ class ball
 var ballArray = [];
 
 var newBall = new ball(canvas.width/2, canvas.height-30);
+newBall.dx = Math.floor(Math.random() * 4);
+let flip = Math.floor(Math.random() * 2)
+if (flip == 0)
+{
+    newBall.dx = -newBall.dx;
+}
 ballArray.push(newBall);
 
 // //ball position
@@ -59,7 +65,7 @@ ballArray.push(newBall);
 // var dy = -1 * ballSpeed;
 
 //ball collision detection
-var ballRadius = 3;
+var ballRadius = 4;
 
 //paddle properties
 var paddleHeight = 10;
@@ -71,16 +77,19 @@ var rightPressed = false;
 var leftPressed = false;
 
 //brick properties
-var brickRowCount = 120;
-var brickColumnCount = 59;
-var brickWidth = 7;
-var brickHeight = 3;
-var brickPadding = 1;
+var brickRowCount = 30;
+var brickColumnCount = 16;
+var brickWidth = 25;
+var brickHeight = 12;
+var brickPadding = 5;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 5;
 
 //scoreboard
 var score = 0;
+
+//for preventing game over lock up
+var gameReset = true;
 
 var bricks = [];
 for (var c = 0; c < brickColumnCount; c++)
@@ -164,15 +173,24 @@ function collisionDetection()
                 for (var i = 0; i < ballArray.length; i++)
                 {
                     var p = ballArray[i];
-                    var offset = ballRadius / 1.7;
+                    var offset = 1;
                     //ballArray[i].x > b.x && ballArray[i].x < b.x+brickWidth && ballArray[i].y > b.y && ballArray[i].y < b.y+brickHeight
-                    if (p.x + offset > b.x && p.x - offset < b.x+brickWidth && p.y + offset > b.y && p.y + offset < b.y+brickHeight && p.hit == false)
+                    if (p.x + offset > b.x + brickPadding / 2 && p.x - offset < b.x + brickWidth + brickPadding / 2 && p.y - offset > b.y - brickPadding / 2 && p.y + offset < b.y + brickHeight + brickPadding / 2 && p.hit == false)
                     {
-                        p.dy = -p.dy;
+                        if (p.x > b.x && p.x < b.x + brickWidth)
+                        {
+                            p.dx = -p.dx;
+                            p.dy = -p.dy;
+                        }
+                        else
+                        {
+                            p.dy = -p.dy;
+                        }
+ 
                         b.status = 0;
                         p.hit = true;
                         score++;
-                        if (score == brickRowCount * brickColumnCount)
+                        if (score == brickRowCount * brickColumnCount + 2)
                         {
                             alert("You Win, Congratulations!");
                             document.location.reload();
@@ -205,7 +223,7 @@ function generateBall()
         createBall.dy = -createBall.dy;
     }
     var leftOrRight = Math.floor(Math.random() * 2);
-    console.log(leftOrRight);
+    //console.log(leftOrRight);
     if (leftOrRight == 0)
     {
         createBall.dx = -createBall.dx;
@@ -282,11 +300,12 @@ function draw()
                 {
                     break;
                 }
-                if (j+1 == ballArray.length)
+                if (j+1 == ballArray.length && gameReset == true)
                 {
-                    // console.log("game over");
-                    // alert ("Game Over");
-                    // document.location.reload();
+                    gameReset = false;
+                    //console.log("game over");
+                    alert ("Game Over");
+                    document.location.reload();
                 }
             }
         }
@@ -296,6 +315,16 @@ function draw()
             if (ballArray[i].x > paddleX && ballArray[i].x < paddleX + paddleWidth && ballArray[i].active == true)
             {
                 ballArray[i].dy = -ballArray[i].dy;
+                ballArray[i].dx = ballArray[i].x - (paddleX + paddleWidth / 2);
+                while (ballArray[i].dx > 6 || ballArray[i].dx < -6)
+                {
+                    ballArray[i].dx = ballArray[i].dx / 2;
+                }
+                //debugging
+                //console.log("ball x: " + ballArray[i].x);
+                //console.log("paddle X + paddle Width / 2 : " + (paddleX + (paddleWidth / 2)));
+                //console.log("paddle edges : left: " + paddleX + " right: " + (paddleX + paddleWidth));
+                //console.log("ball dx: " + ballArray[i].dx);
                 generateBall();
             }
         }
