@@ -169,7 +169,8 @@ function collisionDetection()
                 //         document.location.reload();
                 //     }
                 // }
-
+                
+                // calculations with array
                 for (var i = 0; i < ballArray.length; i++)
                 {
                     var p = ballArray[i];
@@ -260,6 +261,8 @@ function draw()
     // {
     //     dy = -dy;
     // }
+
+    //bounce of top wall compatible will ball array
     for (var i = 0; i < ballArray.length; i++)
     {
         if (ballArray[i].y + ballArray[i].dy < ballRadius)
@@ -287,6 +290,8 @@ function draw()
     //         document.location.reload();
     //      }
     //  }
+
+    //game over and paddle bounce compatible with arrays
     for (var i = 0; i < ballArray.length; i++)
     {
         //ball hits bottom of cavas
@@ -335,6 +340,8 @@ function draw()
     // {
     //     dx = -dx;
     // }
+
+    //bounce off left or right side compatible with arrays
     for (var i = 0; i < ballArray.length; i++)
     {
         if (ballArray[i].x + ballArray[i].dx > canvas.width-ballRadius || ballArray[i].x + ballArray[i].dx < ballRadius)
@@ -380,8 +387,11 @@ document.addEventListener("keyup", keyUpHandler, false);
 //mouse listener
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
+//touch screen input listeners
 //var el = document.getElementsByTagName("canvas")[0];
+//intital touch listener
 document.addEventListener("touchstart", handleStart, false);
+//continous touch while moving listener
 document.addEventListener("touchmove", handleMove, false);
 //document.addEventListener("touchend", handleEnd, false);
 //el.addEventListener("touchend", handleEnd);
@@ -444,4 +454,5 @@ function handleMove(e)
 //setInterval(draw, 10);
 
 //new way to draw frames
+//get new frame now incorporated in the draw function
 draw();
