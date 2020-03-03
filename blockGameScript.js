@@ -8,11 +8,8 @@ var ctx = canvas.getContext("2d");
 
 //random test comment
 var testVar = 3333;
-<<<<<<< HEAD
 //more random changes on another computer
-=======
 //other random changes
->>>>>>> 03e5fb0f7dfb5b7436f95bb9470a901555183ba2
 Math.seedrandom();
 
 //Practice
