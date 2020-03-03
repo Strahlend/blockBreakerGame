@@ -7,7 +7,7 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
 //random test comment
-var testVar = 9999;
+var testVar = 7777;
 
 Math.seedrandom();
 
