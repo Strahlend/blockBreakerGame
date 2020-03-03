@@ -10,6 +10,7 @@ var ctx = canvas.getContext("2d");
 var testVar = 3333;
 //more random changes on another computer
 //other random changes
+//even more random changes
 Math.seedrandom();
 
 //Practice
