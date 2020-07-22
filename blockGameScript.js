@@ -6,45 +6,17 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-//random test comment
-var testVar = 0;
-
 Math.seedrandom();
 
-//Practice
-
-// ctx.beginPath();
-// ctx.rect(20, 40, 50, 50);
-// ctx.fillStyle = "#FF0000";
-// ctx.fill();
-// ctx.closePath();
-
-// ctx.beginPath();
-// ctx.arc(240, 160, 20, 0, Math.PI*2, false);
-// ctx.fillStyle = "green";
-// ctx.fill();
-// ctx.closePath();
-
-// ctx.beginPath();
-// ctx.rect(160, 10, 100, 40);
-// ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
-// ctx.stroke();
-// ctx.closePath();
-
-class ball 
+function ball(_x, _y)
 {
-    x = 0;
-    y = 0;
-    active = true;
-    hit = true
-    ballspeed = 2;
-    dx = 1 * this.ballspeed;
-    dy = -1 * this.ballspeed;
-    constructor (_x, _y, _dx, _dy)
-    {
-        this.x = _x;
-        this.y = _y;
-    }
+    this.x = _x;
+    this.y = _y;
+    this.ballspeed = 2;
+    this.dx = 1 * this.ballspeed;
+    this.dy = -1 * this.ballspeed;
+    this.active = true;
+    this.hit = true;
 }
 
 var ballArray = [];
@@ -57,15 +29,6 @@ if (flip == 0)
     newBall.dx = -newBall.dx;
 }
 ballArray.push(newBall);
-
-// //ball position
-// var x = canvas.width/2;
-// var y = canvas.height-30;
-
-// //ball movement change
-// var ballSpeed = 2;
-// var dx = 1 * ballSpeed;
-// var dy = -1 * ballSpeed;
 
 //ball collision detection
 var ballRadius = 4;
@@ -112,7 +75,7 @@ function drawBall()
         {
             ctx.beginPath();
             ctx.arc(ballArray[i].x, ballArray[i].y, ballRadius, 0, Math.PI*2);
-            ctx.fillStyle = "#0095DD";
+            ctx.fillStyle = "#AC10FE";
             ctx.fill();
             ballArray[i].hit = false;
             ctx.closePath();
@@ -124,7 +87,7 @@ function drawPaddle()
 {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#AC10FE";
     ctx.fill();
     ctx.closePath();
 }
@@ -143,7 +106,7 @@ function drawBricks()
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "#0095DD";
+                ctx.fillStyle = "#AC10FE";
                 ctx.fill();
                 ctx.closePath();
             }
@@ -160,25 +123,11 @@ function collisionDetection()
             var b = bricks[c][r];
             if (b.status == 1)
             {
-                //calculations
-                // if (x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight)
-                // {
-                //     dy = -dy;
-                //     b.status = 0;
-                //     score++;
-                //     if (score == brickRowCount * brickColumnCount)
-                //     {
-                //         alert("You Win, Congratulations!");
-                //         document.location.reload();
-                //     }
-                // }
-                
                 // calculations with array
                 for (var i = 0; i < ballArray.length; i++)
                 {
                     var p = ballArray[i];
                     var offset = 1;
-                    //ballArray[i].x > b.x && ballArray[i].x < b.x+brickWidth && ballArray[i].y > b.y && ballArray[i].y < b.y+brickHeight
                     if (p.x + offset > b.x + brickPadding / 2 && p.x - offset < b.x + brickWidth + brickPadding / 2 && p.y - offset > b.y - brickPadding / 2 && p.y + offset < b.y + brickHeight + brickPadding / 2 && p.hit == false)
                     {
                         if (p.x > b.x && p.x < b.x + brickWidth)
@@ -227,7 +176,6 @@ function generateBall()
         createBall.dy = -createBall.dy;
     }
     var leftOrRight = Math.floor(Math.random() * 2);
-    //console.log(leftOrRight);
     if (leftOrRight == 0)
     {
         createBall.dx = -createBall.dx;
@@ -252,18 +200,11 @@ function draw()
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     //drawing code
-
     drawBall();
     drawPaddle();
     drawBricks();
     collisionDetection();
     drawScore();
-
-    //bounce off top wall
-    // if (y + dy < ballRadius)
-    // {
-    //     dy = -dy;
-    // }
 
     //bounce of top wall compatible will ball array
     for (var i = 0; i < ballArray.length; i++)
@@ -273,26 +214,6 @@ function draw()
             ballArray[i].dy = -ballArray[i].dy;
         }
     }
-
-    //bounce off bottom wall ***** no longer needed
-    // if (y + dy > canvas.height-ballRadius)
-    // {
-    //     dy = -dy;
-    // }
-
-    //game over and paddle bounce
-    //  if (y + dy > canvas.height-ballRadius)
-    //  {
-    //      if (x > paddleX && x < paddleX + paddleWidth)
-    //      {
-    //          dy = -dy;
-    //      }
-    //      else
-    //      {
-    //         alert ("Game Over");
-    //         document.location.reload();
-    //      }
-    //  }
 
     //game over and paddle bounce compatible with arrays
     for (var i = 0; i < ballArray.length; i++)
@@ -328,23 +249,12 @@ function draw()
                 {
                     ballArray[i].dx = ballArray[i].dx / 2;
                 }
-                //debugging
-                //console.log("ball x: " + ballArray[i].x);
-                //console.log("paddle X + paddle Width / 2 : " + (paddleX + (paddleWidth / 2)));
-                //console.log("paddle edges : left: " + paddleX + " right: " + (paddleX + paddleWidth));
-                //console.log("ball dx: " + ballArray[i].dx);
                 generateBall();
             }
         }
     }
 
     //bounce off left or right side
-    // if (x + dx > canvas.width-ballRadius || x + dx < ballRadius)
-    // {
-    //     dx = -dx;
-    // }
-
-    //bounce off left or right side compatible with arrays
     for (var i = 0; i < ballArray.length; i++)
     {
         if (ballArray[i].x + ballArray[i].dx > canvas.width-ballRadius || ballArray[i].x + ballArray[i].dx < ballRadius)
@@ -372,8 +282,6 @@ function draw()
     }
 
     //ball movement
-    // x += dx;
-    // y += dy;
     for (var i = 0; i < ballArray.length; i++)
     {
         ballArray[i].x += ballArray[i].dx;
@@ -390,15 +298,11 @@ document.addEventListener("keyup", keyUpHandler, false);
 //mouse listener
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-//touch screen input listeners
-//var el = document.getElementsByTagName("canvas")[0];
 //intital touch listener
 document.addEventListener("touchstart", handleStart, false);
 //continous touch while moving listener
 document.addEventListener("touchmove", handleMove, false);
-//document.addEventListener("touchend", handleEnd, false);
-//el.addEventListener("touchend", handleEnd);
-//el.addEventListener("touchcancel", handleCancel);
+
 
 //input functions
 function keyDownHandler(e) 
